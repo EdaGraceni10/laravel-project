@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rent;
+use App\Models\user;
+use App\Models\Review;
 use App\Http\Requests\StoreRentRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateRentRequest;
@@ -70,7 +72,7 @@ class RentController extends Controller
        {
         $rents ->where ("endDate",$end_date);
        }
-       
+
 
         return view('rents.index', ['rents' => $rents->paginate(2)]);
     }
@@ -138,8 +140,17 @@ else
     public function show(Rent $rent)
     {
         // $rent = Rent::findOrFail(\request()->id);
+         $reviews =Review::query()->where("rent_id","=",$rent->id)->get();
+         $reviews_id=value(Review::query()->select("user_id")->where("rent_id","=",$rent->id)->get());
+       for($i=0;$i<count($reviews_id);$i++)
+       {
+        $review_id =$reviews_id[$i]['user_id'];
+       }
 
-        return view('rents.show',['rent'=>$rent]);
+         $users=User::query()->where('id',"=",$review_id)->get();
+
+    return view('rents.show',['rent'=>$rent,'reviews'=>$reviews,'users'=>$users]);
+
     }
 
     /**

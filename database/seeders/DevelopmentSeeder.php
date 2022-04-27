@@ -1,11 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Rent;
 
+use App\Models\Rent;
 use Illuminate\Database\Seeder;
 
-class RentSeeder extends Seeder
+class DevelopmentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class RentSeeder extends Seeder
      */
     public function run()
     {
-    Rent::factory(10)->create;
+       $this->call(RentSeeder::class);
     }
 }

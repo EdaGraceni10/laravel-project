@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,14 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+    Route::get('/', [App\Http\Controllers\RentController::class, 'index'])->name('rents.index');
+
 
 Auth::routes();
 Route::group(['middleware'=>['auth']],function(){
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('rents', [App\Http\Controllers\RentController::class, 'store'])->name('rents.store');
+
 Route::get('rents/create', [App\Http\Controllers\RentController::class, 'create'])->name('rents.create');
 Route::get('user/rents', [App\Http\Controllers\RentController::class, 'getRentByUser'])->name('rents.user');// qe ta hapim vetem taks e ketij user
 });

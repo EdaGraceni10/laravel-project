@@ -4,7 +4,7 @@
     <div class="container card">
     <div class="container mt-5">
         <form>
-            <input type="date" name="startDt" placeholder="Start Date">
+            <input type="date" value="{{old('startDt')}}" name="startDt" placeholder="Start Date">
             <input type="date" name="endDt" placeholder="End Date">
             <select name="price" id="price">
             <option value="price">price range</option>
@@ -19,6 +19,7 @@
         @foreach($rents as $rent)
 
         <div class="card-header">       <div class="card-header"> <a href="{{route('rents.show',['rent'=>$rent->id])}}" > {{  $rent->name }}</a></div> <div class="card-body" ><b> Description:</b> {{ $rent->description}} </div>
+
         <img src="{{asset('storage/' . $rent->images) }}">
 
         @endforeach
