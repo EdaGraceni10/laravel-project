@@ -31,9 +31,9 @@
                     <div class="card-body"><b>Review: </b>
 
 @foreach($reviews as $review)
-<!-- @foreach($users as $user)
+ @foreach($users as $user)
 <div class="card">   Authors: {{ $user->name }}</div>
-@endforeach -->
+@endforeach 
 
   <div class="card-header">  {{ $review->description }}</div>
    <br>
