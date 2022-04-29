@@ -16,7 +16,7 @@ class ReviewFactory extends Factory
     {
         return [
             'description'=>$this->faker->text(200),
-            'user_id'=>User::where("owner", 0)->inRandomOrder()->first()->id,
+            'user_id'=>User::where("role","user")->inRandomOrder()->first()->id,
             'rent_id'=>Rent::inRandomOrder()->first()->id
         ];
     }

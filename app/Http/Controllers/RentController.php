@@ -86,18 +86,18 @@ class RentController extends Controller
     public function create()
     {
 
-          if (Auth::user()->owner){
+        //   if (Auth::user()->owner){
         return view('rents.create');
- }
-else
-{
-    return view('rents.404');
-}
+//  }
+// else
+// {
+//     return view('rents.404');
+// }
     }
-    public function error ()
-    {
-        return view('rents.404');
-    }
+//     public function error ()
+//     {
+//         return view('rents.404');
+//     }
     /**
      * Store a newly created resource in storage.
      *
@@ -162,6 +162,24 @@ else
     public function edit(Rent $rent)
     {
         return view('rents.edit',['rent'=>$rent]);
+    }
+    public function addreview(Rent $rent)
+    {
+
+        Review::create ([
+            //field e asaj fillable
+
+
+             'description' =>request()->description,
+
+             'user_id' =>request()->user()->id,
+             'rent_id'=>$rent->id,
+        ]);
+        $reviews =Review::query()->where("rent_id","=",$rent->id)->get();
+
+
+    return view('rents.show',['rent'=>$rent,'reviews'=>$reviews]);
+
     }
     public function reservation(Rent $rent)
     {
@@ -231,13 +249,8 @@ else
 
     public function getRentByUser()
     {
-        if (Auth::user()->owner){
+
             return view('rents.rents',(['rents'=>request()->user()->rents()->paginate(2)]));
-     }
-    else
-    {
-        return view('rents.404');
-    }
 
     }
 

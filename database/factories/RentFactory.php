@@ -26,7 +26,7 @@ class RentFactory extends Factory
            'startDate'=>Carbon::parse($start_date)->format('Y-m-d'),
             'endDate'=>Carbon::parse($end_date)->format('Y-m-d'),
             // 'user_id'=>$this->faker->randomElement($array = array (1,2))
-            'user_id'=>User::where("owner", 1)->inRandomOrder()->first()->id // kap vetem ato qe kane user owner
+            'user_id'=>User::where("role", "Owner")->inRandomOrder()->first()->id // kap vetem ato qe kane user owner
 
 
         ];
