@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rent;
+use App\Models\Resevation;
 use App\Models\user;
 use App\Models\Review;
 use App\Http\Requests\StoreRentRequest;
@@ -42,7 +43,7 @@ class RentController extends Controller
             $min_price = 300;
             $max_price=  400;
             break;
-            case ">400":
+            case "410":
 
                 $min_price = 400;
                 $max_price=  10000000;
@@ -74,7 +75,7 @@ class RentController extends Controller
        }
 
 
-        return view('rents.index', ['rents' => $rents->paginate(2)]);
+        return view('rents.index', ['rents' => $rents->paginate(5)->withQueryString()]);
     }
 
     /**
@@ -140,19 +141,18 @@ else
     public function show(Rent $rent)
     {
         // $rent = Rent::findOrFail(\request()->id);
+
          $reviews =Review::query()->where("rent_id","=",$rent->id)->get();
-         $reviews_id=value(Review::query()->select("user_id")->where("rent_id","=",$rent->id)->get());
-       for($i=0;$i<count($reviews_id);$i++)
-       {
-        $review_id =$reviews_id[$i]['user_id'];
-       }
+        //  $reviews_id=value(Review::query()->select("user_id")->where("rent_id","=",$rent->id)->get());
+    //    for($i=0;$i<count($reviews_id);$i++)
+    //    {
+    //     $review_id =$reviews_id[$i]['user_id'];
+    //    }
 
-         $users=User::query()->where('id',"=",$review_id)->get();
+        //  $users=User::query()->where('id',"=",$review_id)->get();
 
-    return view('rents.show',['rent'=>$rent,'reviews'=>$reviews,'users'=>$users]);
-
+    return view('rents.show',['rent'=>$rent,'reviews'=>$reviews]);
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -163,7 +163,33 @@ else
     {
         return view('rents.edit',['rent'=>$rent]);
     }
+    public function reservation(Rent $rent)
+    {
+        return view('rents.reservation',['rent'=>$rent]);
+    }
+    public function storereservation(Rent $rent)
+    {
+        Resevation::create ([
+            //field e asaj fillable
 
+            'startDate'=>request()->startDate,
+            'endDate'=>request()->endDate,
+             'NoOfPerson'=>request()->noOfPerson,
+             'fullName'=>request()->name,
+             'email'=>request()->email,
+              'rent_id'=>$rent->id,
+             'user_id' =>request()->user()->id,
+
+        ]);
+        // $reviews_id=value(Rent::query()->select("startDate")->where("id","=",$rent->id)->get());
+    if((request()->startDate<$rent->startDate) || (request()->endtDate>$rent->endtDate))
+         {
+            $error ='this date is not possible please check another one';
+            return view('rents.reservation',['error'=>$error,'rent'=>$rent]);
+       }
+
+       return redirect()->route('rents.index');
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -173,8 +199,19 @@ else
      */
     public function update(UpdateRentRequest $request, Rent $rent)
     {
-        // return redirect()->route('rents.index');
-        return view('rents.show',['rent'=>$rent]);
+
+        $rent->name = $request->name;
+        $rent->description =$request->description;
+        $rent->address = $request->address;
+        $rent->price = $request->price;
+        $rent->images = $request->images->store('uploads','public');
+        $rent->startDate = $request->startDate;
+        $rent->endDate = $request->endDate;
+        $rent->user_id = request()->user()->id;
+
+
+      $rent->save();
+      return redirect()->route('rents.user');
     }
 
     /**

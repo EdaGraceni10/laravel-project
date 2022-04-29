@@ -51,4 +51,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
+    public function reservations ()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+    public static function getUserById($id)
+    {
+            return User::where('id',$id)->pluck('name')->first();
+    }
 }

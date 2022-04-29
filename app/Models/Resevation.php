@@ -5,13 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Review extends Model
-{
-    protected $fillable = [
+class Resevation extends Model
+{  protected $fillable = [
 
-        'description'
+    'startDate',
+    'endDate',
+    'NoOfPerson',
+    'user_id',
+    'rent_id',
+    'fullName',
+    'email'
 
-    ];
+];
     use HasFactory;
     public function rent()
     {
